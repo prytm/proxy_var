@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 
 # Load data
 final_df = pd.read_csv('final_df.csv', delimiter=',')
-final_df = pd.read_csv('final_df.csv', delimiter=',')  # Pastikan file ini ada
 
 # Judul Aplikasi
 st.title('Perbandingan Saham')
