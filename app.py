@@ -185,7 +185,12 @@ if min_stocks_without_subsektor:
             
             # Hitung Bollinger Bands
             sma, upper_band, lower_band = calculate_bollinger_bands(daily_returns_2)
-            
+            # Ubah menjadi 1D array
+            data = data.squeeze()
+            sma = sma.squeeze()
+            upper_band = upper_band.squeeze()
+            lower_band = lower_band.squeeze()
+
             plt.figure(figsize=(10, 5))
             plt.plot(daily_returns_2.index, daily_returns_2.values, label='Harga Penutupan')
             plt.plot(sma, label='SMA (20)')
@@ -199,10 +204,5 @@ if min_stocks_without_subsektor:
             st.pyplot(plt)
         except Exception as e:
             st.error(f"Error fetching data for {not_subsektor_stock}: {e}")
-            
-            st.write(f"Data shape: {data.shape}")
-            st.write(f"SMA shape: {sma.shape}")
-            st.write(f"Upper Band shape: {upper_band.shape}")
-            st.write(f"Lower Band shape: {lower_band.shape}")
 else:
     st.write("Tidak ada hasil yang ditemukan.\n")
