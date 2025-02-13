@@ -1,5 +1,3 @@
-pip install yfinance matplotlib
-
 yfinance
 pandas
 numpy
