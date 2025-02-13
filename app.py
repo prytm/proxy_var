@@ -143,6 +143,10 @@ if min_stocks_with_subsektor:
         try:
             st.write(f"Grafik Perubahan Harga Saham {subsektor_stock}")
             data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1))['Close']
+            data = data.squeeze()
+            sma = sma.squeeze()
+            upper_band = upper_band.squeeze()
+            lower_band = lower_band.squeeze()
             
             # Hitung Bollinger Bands
             sma, upper_band, lower_band = calculate_bollinger_bands(data)
