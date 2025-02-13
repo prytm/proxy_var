@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 # Load data
 final_df = pd.read_csv('final_df.csv', delimiter=',')
+final_df = pd.read_csv('final_df.csv', delimiter=',')  # Pastikan file ini ada
 
 # Judul Aplikasi
 st.title('Perbandingan Saham')
@@ -114,6 +115,17 @@ def create_result_df(sorted_stocks, details):
         data.append(row)
     return pd.DataFrame(data)
 
+# Fungsi untuk menghitung Bollinger Bands
+def calculate_bollinger_bands(data, window=20):
+    """
+    Menghitung Bollinger Bands.
+    """
+    sma = data.rolling(window=window).mean()
+    std = data.rolling(window=window).std()
+    upper_band = sma + (2 * std)
+    lower_band = sma - (2 * std)
+    return sma, upper_band, lower_band
+
 # Tampilkan hasil dengan subsektor jika ada
 st.write("Hasil dengan Mempertimbangkan Sub Sektor")
 if min_stocks_with_subsektor:
@@ -132,13 +144,19 @@ if min_stocks_with_subsektor:
         try:
             st.write(f"Grafik Perubahan Harga Saham {subsektor_stock}")
             data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1))['Close']
-            daily_returns_1 = data.pct_change().dropna()
+            
+            # Hitung Bollinger Bands
+            sma, upper_band, lower_band = calculate_bollinger_bands(data)
+            
             plt.figure(figsize=(10, 5))
-            plt.plot(daily_returns_1, label=subsektor_stock)
-            plt.title(f"Perubahan Harga Saham {subsektor_stock}")
+            plt.plot(data, label='Harga Penutupan')
+            plt.plot(sma, label='SMA (20)')
+            plt.plot(upper_band, label='Upper Band')
+            plt.plot(lower_band, label='Lower Band')
+            plt.fill_between(data.index, lower_band, upper_band, color='gray', alpha=0.3)
+            plt.title(f"Perubahan Harga Saham {subsektor_stock} dengan Bollinger Bands")
             plt.xlabel("Tanggal")
             plt.ylabel("Harga Penutupan")
-            plt.grid(True)
             plt.legend()
             st.pyplot(plt)
         except Exception as e:
@@ -164,13 +182,19 @@ if min_stocks_without_subsektor:
         try:
             st.write(f"Grafik Perubahan Harga Saham {not_subsektor_stock}")
             data = yf.download(not_subsektor_stock, start=target_date_not_subsektor, end=pd.to_datetime(target_date_not_subsektor) + pd.DateOffset(years=1))['Close']
-            daily_returns_2 = data.pct_change().dropna()
+            
+            # Hitung Bollinger Bands
+            sma, upper_band, lower_band = calculate_bollinger_bands(data)
+            
             plt.figure(figsize=(10, 5))
-            plt.plot(daily_returns_2, label=not_subsektor_stock)
-            plt.title(f"Perubahan Harga Saham {not_subsektor_stock}")
+            plt.plot(data, label='Harga Penutupan')
+            plt.plot(sma, label='SMA (20)')
+            plt.plot(upper_band, label='Upper Band')
+            plt.plot(lower_band, label='Lower Band')
+            plt.fill_between(data.index, lower_band, upper_band, color='gray', alpha=0.3)
+            plt.title(f"Perubahan Harga Saham {not_subsektor_stock} dengan Bollinger Bands")
             plt.xlabel("Tanggal")
             plt.ylabel("Harga Penutupan")
-            plt.grid(True)
             plt.legend()
             st.pyplot(plt)
         except Exception as e:
