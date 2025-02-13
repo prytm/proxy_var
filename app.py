@@ -152,7 +152,7 @@ if min_stocks_with_subsektor:
             upper_band = upper_band.squeeze()
             lower_band = lower_band.squeeze()
 
-            plt.figure(figsize=(10, 5)) # Ukuran plot disesuaikan
+            plt.figure(figsize=(12, 5)) # Ukuran plot disesuaikan
             plt.plot(daily_returns_1.index, daily_returns_1.values, label='Daily Return')
             plt.plot(sma, label='SMA (10)')
             plt.plot(upper_band, label='Upper Band', linestyle='dashed', linewidth=1.1)
@@ -198,7 +198,7 @@ if min_stocks_without_subsektor:
             upper_band = upper_band.squeeze()
             lower_band = lower_band.squeeze()
 
-            plt.figure(figsize=(6, 5)) # Ukuran plot disesuaikan
+            plt.figure(figsize=(12, 5)) # Ukuran plot disesuaikan
             plt.plot(daily_returns_2.index, daily_returns_2.values, label='Daily Return')
             plt.plot(sma, label='SMA (10)')
             plt.plot(upper_band, label='Upper Band', linestyle='dashed', linewidth=1.1)
