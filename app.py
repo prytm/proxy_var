@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 
 # Load data
 final_df = pd.read_csv('final_df.csv', delimiter=',')
-final_df = pd.read_csv('final_df.csv', delimiter=',')  # Pastikan file ini ada
 
 # Judul Aplikasi
 st.title('Perbandingan Saham')
@@ -14,165 +13,51 @@ st.title('Perbandingan Saham')
 st.header("Masukkan Data Saham Target")
 
 # Menggunakan st.columns untuk mengatur layout
-col1, col2 = st.columns(2)  # Baris pertama: 2 kolom
-col3, col4 = st.columns(2)  # Baris kedua: 2 kolom
+col1, col2 = st.columns(2)
+col3, col4 = st.columns(2)
 
-# Input di baris pertama
 with col1:
     target_stock = st.text_input("Kode Saham Target (contoh: CBDK.JK):", value="CBDK.JK")
 with col2:
     target_roa = st.number_input("Return on Assets (RoA) Target (%):", value=14.69)
-
-# Input di baris kedua
 with col3:
     target_mc = st.number_input("Market Cap Target (dalam Rupiah):", value=624462420000)
 with col4:
     target_roe = st.number_input("Return on Equity (RoE) Target (%):", value=35.61)
 
-# Daftar pilihan subsektor
-subsektor_options = [
-    'Oil, Gas, & Coal', 'Basic Materials', 'Banks',
-    'Healthcare Equipment & Providers', 'Software & IT Service',
-    'Logistics & Deliveries', 'Food & Beverage', 'Industrial Goods',
-    'Consumer Services', 'Telecommunication', 'Industrial Services',
-    'Retailing', 'Automobiles & Components', 'Alternative Energy',
-    'Media & Entertainment', 'Properties & Real Estate',
-    'Heavy Constructions & Civil', 'Nondurable Household Products ',
-    'Leisure Goods', 'Household Goods', 'Utilities',
-    'Food & Staples Retailing ', 'Technology Hardware',
-    'Financing Service', 'Property & Real Estate',
-    'Phramaceuticals & Healthcare', 'Utilites',
-    'Multi Sector Holdings', 'Nondurable Household Products',
-    'Apparel & Luxury Goods'
-]
+# Daftar subsektor
+subsektor_options = final_df['Sub Sektor'].unique().tolist()
+target_subsektor = st.selectbox("Sub Sektor Target:", options=subsektor_options)
 
-# Dropdown untuk memilih subsektor
-target_subsektor = st.selectbox("Sub Sektor Target:", options=subsektor_options, index=subsektor_options.index('Property & Real Estate'))
+# Filter data sesuai subsektor
+def filter_data():
+    return final_df[(final_df['Sub Sektor'] == target_subsektor) & (final_df['Kode'] != target_stock)]
 
-# Konversi ke DataFrame
-comparison_table = pd.DataFrame(final_df)
+def plot_with_bollinger(stock_code):
+    try:
+        stock_data = yf.download(stock_code, period="1y")
+        stock_data['SMA'] = stock_data['Close'].rolling(window=20).mean()
+        stock_data['Upper'] = stock_data['SMA'] + (2 * stock_data['Close'].rolling(window=20).std())
+        stock_data['Lower'] = stock_data['SMA'] - (2 * stock_data['Close'].rolling(window=20).std())
 
-def calculate_percentage(filtered_table):
-    """
-    Menghitung persentase perbedaan dengan saham target.
-    """
-    total_percentage = {}
-    percentage_details = {}
+        plt.figure(figsize=(10, 5))
+        plt.plot(stock_data['Close'], label=stock_code, color='blue')
+        plt.plot(stock_data['SMA'], label='SMA 20', color='orange')
+        plt.fill_between(stock_data.index, stock_data['Lower'], stock_data['Upper'], color='gray', alpha=0.2)
+        plt.title(f'Bollinger Bands untuk {stock_code}')
+        plt.xlabel('Tanggal')
+        plt.ylabel('Harga Penutupan')
+        plt.legend()
+        st.pyplot(plt)
+    except Exception as e:
+        st.error(f"Error fetching data for {stock_code}: {e}")
 
-    for metric, target_value in zip(['RoA', 'Market Cap', 'RoE'], [target_roa, target_mc, target_roe]):
-        differences = abs(filtered_table[metric] - target_value)
-        percentage = (differences / abs(target_value)) * 100  # Gunakan abs untuk menghindari pembagian negatif
-        filtered_table[f'{metric}_Percentage'] = percentage
-
-        for stock, percent in zip(filtered_table['Kode'], percentage):
-            if stock not in total_percentage:
-                total_percentage[stock] = 0
-                percentage_details[stock] = {}
-            total_percentage[stock] += percent
-            percentage_details[stock][metric] = percent
-
-    # Urutkan berdasarkan total persentase terkecil (mendekati 0)
-    sorted_total = sorted(total_percentage.items(), key=lambda x: abs(x[1]))[:3]
-
-    return sorted_total, percentage_details
-
-def compare_with_subsektor():
-    """
-    Membandingkan dengan saham dalam subsektor yang sama.
-    """
-    filtered_table = comparison_table[(comparison_table['Sub Sektor'] == target_subsektor) &
-                                      (comparison_table['Kode'] != target_stock)]
-    if filtered_table.empty:
-        st.warning(f"Warning: Tidak ada saham lain dalam subsektor {target_subsektor} untuk dibandingkan.\n")
-        return [], {}
-
-    return calculate_percentage(filtered_table)
-
-def compare_without_subsektor():
-    """
-    Membandingkan dengan semua saham tanpa mempertimbangkan subsektor.
-    """
-    filtered_table = comparison_table[comparison_table['Kode'] != target_stock]
-    return calculate_percentage(filtered_table)
-
-# Jalankan perbandingan
-min_stocks_with_subsektor, details_with_subsektor = compare_with_subsektor()
-min_stocks_without_subsektor, details_without_subsektor = compare_without_subsektor()
-
-# Fungsi untuk membuat DataFrame dari hasil perbandingan
-def create_result_df(sorted_stocks, details):
-    """
-    Membuat DataFrame dari hasil perbandingan.
-    """
-    data = []
-    for stock, _ in sorted_stocks:
-        row = {
-            'Kode': stock,
-            'RoA': f"{details[stock]['RoA']:.2f}%",
-            'Market Cap': f"{details[stock]['Market Cap']:.2f}%",
-            'RoE': f"{details[stock]['RoE']:.2f}%"
-        }
-        data.append(row)
-    return pd.DataFrame(data)
-
-# Tampilkan hasil dengan subsektor jika ada
-st.write("Hasil dengan Mempertimbangkan Sub Sektor")
-if min_stocks_with_subsektor:
-    df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
-    
-    # Bagi layout menjadi dua kolom: DataFrame dan Plot
-    col_df, col_plot = st.columns(2)
-    
-    with col_df:
-        st.write(df_with_subsektor)
-    
-    with col_plot:
-        subsektor_stock = min_stocks_with_subsektor[0][0]
-        target_date_subsektor = final_df[final_df['Kode'] == subsektor_stock]['Date'].iloc[0]
-        
-        try:
-            st.write(f"Grafik Perubahan Harga Saham {subsektor_stock}")
-            data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1))['Close']
-            daily_returns_1 = data.pct_change().dropna()
-            plt.figure(figsize=(10, 5))
-            plt.plot(daily_returns_1, label=subsektor_stock)
-            plt.title(f"Perubahan Harga Saham {subsektor_stock}")
-            plt.xlabel("Tanggal")
-            plt.ylabel("Harga Penutupan")
-            plt.legend()
-            st.pyplot(plt)
-        except Exception as e:
-            st.error(f"Error fetching data for {subsektor_stock}: {e}")
+# Menampilkan hasil saham yang dibandingkan
+filtered_df = filter_data()
+if not filtered_df.empty:
+    st.write("Hasil Saham yang Dibandingkan dalam Sub Sektor:")
+    st.dataframe(filtered_df[['Kode', 'RoA', 'Market Cap', 'RoE']])
+    for stock in filtered_df['Kode'].head(3):
+        plot_with_bollinger(stock)
 else:
-    st.write("Tidak ada hasil dalam subsektor yang sama.\n")
-
-# Tampilkan hasil tanpa subsektor
-st.write("Hasil tanpa Mempertimbangkan Sub Sektor")
-if min_stocks_without_subsektor:
-    df_without_subsektor = create_result_df(min_stocks_without_subsektor, details_without_subsektor)
-    
-    # Bagi layout menjadi dua kolom: DataFrame dan Plot
-    col_df, col_plot = st.columns(2)
-    
-    with col_df:
-        st.write(df_without_subsektor)
-    
-    with col_plot:
-        not_subsektor_stock = min_stocks_without_subsektor[0][0]
-        target_date_not_subsektor = final_df[final_df['Kode'] == not_subsektor_stock]['Date'].iloc[0]
-        
-        try:
-            st.write(f"Grafik Perubahan Harga Saham {not_subsektor_stock}")
-            data = yf.download(not_subsektor_stock, start=target_date_not_subsektor, end=pd.to_datetime(target_date_not_subsektor) + pd.DateOffset(years=1))['Close']
-            daily_returns_2 = data.pct_change().dropna()
-            plt.figure(figsize=(10, 5))
-            plt.plot(daily_returns_2, label=not_subsektor_stock)
-            plt.title(f"Perubahan Harga Saham {not_subsektor_stock}")
-            plt.xlabel("Tanggal")
-            plt.ylabel("Harga Penutupan")
-            plt.legend()
-            st.pyplot(plt)
-        except Exception as e:
-            st.error(f"Error fetching data for {not_subsektor_stock}: {e}")
-else:
-    st.write("Tidak ada hasil yang ditemukan.\n")
+    st.warning("Tidak ada saham lain dalam subsektor yang dipilih.")
