@@ -181,12 +181,13 @@ if min_stocks_without_subsektor:
         try:
             st.write(f"Grafik Perubahan Harga Saham {not_subsektor_stock}")
             data = yf.download(not_subsektor_stock, start=target_date_not_subsektor, end=pd.to_datetime(target_date_not_subsektor) + pd.DateOffset(years=1))['Close']
+            daily_returns_2 = data.pct_change().dropna()
             
             # Hitung Bollinger Bands
-            sma, upper_band, lower_band = calculate_bollinger_bands(data)
+            sma, upper_band, lower_band = calculate_bollinger_bands(daily_returns_2)
             
             plt.figure(figsize=(10, 5))
-            plt.plot(data, label='Harga Penutupan')
+            plt.plot(daily_returns_2.index, daily_returns_2.values, label='Harga Penutupan')
             plt.plot(sma, label='SMA (20)')
             plt.plot(upper_band, label='Upper Band')
             plt.plot(lower_band, label='Lower Band')
