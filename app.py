@@ -115,12 +115,12 @@ def create_result_df(sorted_stocks, details):
     return pd.DataFrame(data)
 
 # Fungsi untuk menghitung Bollinger Bands
-def calculate_bollinger_bands(data, window=10):
+def calculate_bollinger_bands(data, window=15):
     """
     Menghitung Bollinger Bands.
     """
-    sma = data.rolling(window=window, min_periods = 1).mean()
-    std = data.rolling(window=window, min_periods = 1).std()
+    sma = data.rolling(window=window).mean()
+    std = data.rolling(window=window).std()
     upper_band = sma + (2 * std)
     lower_band = sma - (2 * std)
     return sma, upper_band, lower_band
