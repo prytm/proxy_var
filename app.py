@@ -115,7 +115,7 @@ def create_result_df(sorted_stocks, details):
     return pd.DataFrame(data)
 
 # Fungsi untuk menghitung Bollinger Bands
-def calculate_bollinger_bands(data, window=20):
+def calculate_bollinger_bands(data, window=10):
     """
     Menghitung Bollinger Bands.
     """
@@ -163,6 +163,7 @@ if min_stocks_with_subsektor:
             plt.xlabel("Tanggal")
             plt.ylabel("Harga Penutupan")
             plt.legend()
+            plt.grid(True)
             st.pyplot(plt)
         except Exception as e:
             st.error(f"Error fetching data for {subsektor_stock}: {e}")
@@ -207,6 +208,7 @@ if min_stocks_without_subsektor:
             plt.xlabel("Tanggal")
             plt.ylabel("Harga Penutupan")
             plt.legend()
+            plt.grid(True)
             st.pyplot(plt)
         except Exception as e:
             st.error(f"Error fetching data for {not_subsektor_stock}: {e}")
