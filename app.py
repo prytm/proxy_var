@@ -132,6 +132,7 @@ if min_stocks_with_subsektor:
     col_df, col_plot = st.columns(2)
 
     with col_df:
+        st.write('Closest Stock Considering Sub-Sector')
         st.dataframe(df_with_subsektor, use_container_width=True)  # Perbaikan di sini
 
     with col_plot:
@@ -177,6 +178,7 @@ if min_stocks_without_subsektor:
     col_df, col_plot = st.columns(2)
 
     with col_df:
+        st.write('Closest Stock without Considering Sub-Sector')
         st.dataframe(df_without_subsektor, use_container_width=True)  # Perbaikan di sini
 
     with col_plot:
