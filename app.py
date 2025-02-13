@@ -145,13 +145,13 @@ if min_stocks_with_subsektor:
             data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1))['Close']
             daily_returns_1 = data.pct_change().dropna()
             
+            # Hitung Bollinger Bands
+            sma, upper_band, lower_band = calculate_bollinger_bands(daily_returns_1)
+
             data = data.squeeze()
             sma = sma.squeeze()
             upper_band = upper_band.squeeze()
             lower_band = lower_band.squeeze()
-            
-            # Hitung Bollinger Bands
-            sma, upper_band, lower_band = calculate_bollinger_bands(daily_returns_1)
             
             plt.figure(figsize=(10, 5))
             plt.plot(data, label='Harga Penutupan')
