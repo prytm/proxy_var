@@ -154,11 +154,11 @@ if min_stocks_with_subsektor:
             lower_band = lower_band.squeeze()
             
             plt.figure(figsize=(10, 5))
-            plt.plot(data, label='Harga Penutupan')
+            plt.plot(daily_returns_1.index, daily_returns_1.values, label='Daily Return')
             plt.plot(sma, label='SMA (20)')
             plt.plot(upper_band, label='Upper Band')
             plt.plot(lower_band, label='Lower Band')
-            plt.fill_between(data.index, lower_band, upper_band, color='gray', alpha=0.3)
+            plt.fill_between(daily_returns_1.index, lower_band, upper_band, color='gray', alpha=0.3)
             plt.title(f"Perubahan Harga Saham {subsektor_stock} dengan Bollinger Bands")
             plt.xlabel("Tanggal")
             plt.ylabel("Harga Penutupan")
@@ -198,7 +198,7 @@ if min_stocks_without_subsektor:
             lower_band = lower_band.squeeze()
 
             plt.figure(figsize=(10, 5))
-            plt.plot(daily_returns_2.index, daily_returns_2.values, label='Harga Penutupan')
+            plt.plot(daily_returns_2.index, daily_returns_2.values, label='Daily Return')
             plt.plot(sma, label='SMA (20)')
             plt.plot(upper_band, label='Upper Band')
             plt.plot(lower_band, label='Lower Band')
