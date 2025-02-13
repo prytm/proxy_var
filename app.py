@@ -129,12 +129,10 @@ def calculate_bollinger_bands(data, window=15):
 st.write("Hasil dengan Mempertimbangkan Sub Sektor")
 if min_stocks_with_subsektor:
     df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
-    
-    # Bagi layout menjadi dua kolom: DataFrame dan Plot
     col_df, col_plot = st.columns(2)
     
     with col_df:
-        st.write(df_with_subsektor)
+        st.dataframe(df_with_subsektor, use_container_width=True) # 
     
     with col_plot:
         subsektor_stock = min_stocks_with_subsektor[0][0]
@@ -179,7 +177,7 @@ if min_stocks_without_subsektor:
     col_df, col_plot = st.columns(2)
     
     with col_df:
-        st.write(df_without_subsektor)
+        st.dataframe(df_without_subsektor, use_container_width=True) # 
     
     with col_plot:
         not_subsektor_stock = min_stocks_without_subsektor[0][0]
