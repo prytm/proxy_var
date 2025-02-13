@@ -8,10 +8,22 @@ st.title('Perbandingan Saham')
 
 # Input pengguna untuk target
 st.header("Masukkan Data Saham Target")
-target_stock = st.text_input("Kode Saham Target (contoh: CBDK.JK):", value="CBDK.JK")
-target_roa = st.number_input("Return on Assets (RoA) Target (%):", value=14.69)
-target_mc = st.number_input("Market Cap Target (dalam Rupiah):", value=624462420000)
-target_roe = st.number_input("Return on Equity (RoE) Target (%):", value=35.61)
+
+# Menggunakan st.columns untuk mengatur layout
+col1, col2 = st.columns(2)  # Baris pertama: 2 kolom
+col3, col4 = st.columns(2)  # Baris kedua: 2 kolom
+
+# Input di baris pertama
+with col1:
+    target_stock = st.text_input("Kode Saham Target (contoh: CBDK.JK):", value="CBDK.JK")
+with col2:
+    target_roa = st.number_input("Return on Assets (RoA) Target (%):", value=14.69)
+
+# Input di baris kedua
+with col3:
+    target_mc = st.number_input("Market Cap Target (dalam Rupiah):", value=624462420000)
+with col4:
+    target_roe = st.number_input("Return on Equity (RoE) Target (%):", value=35.61)
 
 # Daftar pilihan subsektor
 subsektor_options = [
