@@ -133,8 +133,9 @@ if min_stocks_with_subsektor:
         try:
             st.write(f"Grafik Perubahan Harga Saham {subsektor_stock}")
             data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1))['Close']
+            daily_returns_1 = data.pct_change().dropna()
             plt.figure(figsize=(10, 5))
-            plt.plot(data, label=subsektor_stock)
+            plt.plot(daily_returns_1, label=subsektor_stock)
             plt.title(f"Perubahan Harga Saham {subsektor_stock}")
             plt.xlabel("Tanggal")
             plt.ylabel("Harga Penutupan")
@@ -163,8 +164,9 @@ if min_stocks_without_subsektor:
         try:
             st.write(f"Grafik Perubahan Harga Saham {not_subsektor_stock}")
             data = yf.download(not_subsektor_stock, start=target_date_not_subsektor, end=pd.to_datetime(target_date_not_subsektor) + pd.DateOffset(years=1))['Close']
+            daily_returns_2 = data.pct_change().dropna()
             plt.figure(figsize=(10, 5))
-            plt.plot(data, label=not_subsektor_stock)
+            plt.plot(daily_returns_2, label=not_subsektor_stock)
             plt.title(f"Perubahan Harga Saham {not_subsektor_stock}")
             plt.xlabel("Tanggal")
             plt.ylabel("Harga Penutupan")
