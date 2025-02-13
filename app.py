@@ -197,7 +197,7 @@ if min_stocks_without_subsektor:
             plt.ylabel("Harga Penutupan")
             plt.legend()
             st.pyplot(plt)
-            print(type(daily_returns_2, daily_returns_2.shape)
+            print(type(daily_returns_2, daily_returns_2.shape))
         except Exception as e:
             st.error(f"Error fetching data for {not_subsektor_stock}: {e}")
 else:
