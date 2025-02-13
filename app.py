@@ -1,81 +1,114 @@
 import streamlit as st
 import pandas as pd
-import yfinance as yf
-import numpy as np
 
-def compare_stocks(target_stock, financial_table, consider_subsector=True):
-    if target_stock not in financial_table['Kode'].values:
-        st.error(f"Error: Saham {target_stock} tidak ditemukan dalam dataset.")
-        return None, None
+# Judul Aplikasi
+st.title('Perbandingan Saham')
 
-    stock_frequencies = {}
-    comparison_results = {}
-    
-    if consider_subsector:
-        target_subsektor = financial_table.loc[financial_table['Kode'] == target_stock, 'Sub_Sektor'].values[0]
-        filtered_table = financial_table[(financial_table['Sub_Sektor'] == target_subsektor) & (financial_table['Kode'] != target_stock)]
-    else:
-        filtered_table = financial_table[financial_table['Kode'] != target_stock]
-    
+# Input pengguna untuk target
+st.header("Masukkan Data Saham Target")
+target_stock = st.text_input("Kode Saham Target (contoh: CBDK.JK):", value="CBDK.JK")
+target_roa = st.number_input("Return on Assets (RoA) Target (%):", value=14.69)
+target_mc = st.number_input("Market Cap Target (dalam Rupiah):", value=624462420000)
+target_roe = st.number_input("Return on Equity (RoE) Target (%):", value=35.61)
+
+# Daftar pilihan subsektor
+subsektor_options = [
+    'Oil, Gas, & Coal', 'Basic Materials', 'Banks',
+    'Healthcare Equipment & Providers', 'Software & IT Service',
+    'Logistics & Deliveries', 'Food & Beverage', 'Industrial Goods',
+    'Consumer Services', 'Telecommunication', 'Industrial Services',
+    'Retailing', 'Automobiles & Components', 'Alternative Energy',
+    'Media & Entertainment', 'Properties & Real Estate',
+    'Heavy Constructions & Civil', 'Nondurable Household Products ',
+    'Leisure Goods', 'Household Goods', 'Utilities',
+    'Food & Staples Retailing ', 'Technology Hardware',
+    'Financing Service', 'Property & Real Estate',
+    'Phramaceuticals & Healthcare', 'Utilites',
+    'Multi Sector Holdings', 'Nondurable Household Products',
+    'Apparel & Luxury Goods'
+]
+
+# Dropdown untuk memilih subsektor
+target_subsektor = st.selectbox("Sub Sektor Target:", options=subsektor_options, index=subsektor_options.index('Property & Real Estate'))
+
+# Konversi ke DataFrame (pastikan final_df sudah didefinisikan)
+comparison_table = pd.DataFrame(final_df)  # Ganti dengan data Anda
+
+def calculate_percentage(filtered_table):
+    """
+    Menghitung persentase perbedaan dengan saham target.
+    """
+    total_percentage = {}
+    percentage_details = {}
+
+    for metric, target_value in zip(['RoA', 'Market Cap', 'RoE'], [target_roa, target_mc, target_roe]):
+        differences = abs(filtered_table[metric] - target_value)
+        percentage = (differences / abs(target_value)) * 100  # Gunakan abs untuk menghindari pembagian negatif
+        filtered_table[f'{metric}_Percentage'] = percentage
+
+        for stock, percent in zip(filtered_table['Kode'], percentage):
+            if stock not in total_percentage:
+                total_percentage[stock] = 0
+                percentage_details[stock] = {}
+            total_percentage[stock] += percent
+            percentage_details[stock][metric] = percent
+
+    # Urutkan berdasarkan total persentase terkecil (mendekati 0)
+    sorted_total = sorted(total_percentage.items(), key=lambda x: abs(x[1]))[:3]
+
+    return sorted_total, percentage_details
+
+def compare_with_subsektor():
+    """
+    Membandingkan dengan saham dalam subsektor yang sama.
+    """
+    filtered_table = comparison_table[(comparison_table['Sub Sektor'] == target_subsektor) &
+                                      (comparison_table['Kode'] != target_stock)]
     if filtered_table.empty:
-        st.warning("Tidak ada saham lain untuk dibandingkan.")
-        return None, None
+        st.warning(f"Warning: Tidak ada saham lain dalam subsektor {target_subsektor} untuk dibandingkan.\n")
+        return [], {}
 
-    for metric in financial_table.columns:
-        if metric not in ['Kode', 'Sub_Sektor']:
-            target_value = financial_table.loc[financial_table['Kode'] == target_stock, metric].values[0]
-            differences = abs(filtered_table[metric] - target_value)
-            sorted_differences = differences.sort_values().head(5)
-            comparison_results[metric] = filtered_table.loc[sorted_differences.index, 'Kode'].tolist()
-            
-            for stock in filtered_table.loc[sorted_differences.index, 'Kode']:
-                stock_frequencies[stock] = stock_frequencies.get(stock, 0) + 1
-    
-    sorted_frequencies = dict(sorted(stock_frequencies.items(), key=lambda item: item[1], reverse=True))
-    return comparison_results, sorted_frequencies
+    return calculate_percentage(filtered_table)
 
-def get_daily_returns(stock_list, start_date="2023-12-01", end_date="2024-12-31"):
-    data = yf.download(stock_list, start=start_date, end=end_date)['Close']
-    return data.pct_change().dropna()
+def compare_without_subsektor():
+    """
+    Membandingkan dengan semua saham tanpa mempertimbangkan subsektor.
+    """
+    filtered_table = comparison_table[comparison_table['Kode'] != target_stock]
+    return calculate_percentage(filtered_table)
 
-def calculate_var(returns, confidence_level=0.95):
-    return np.percentile(returns, 100 * (1 - confidence_level))
+# Jalankan perbandingan
+min_stocks_with_subsektor, details_with_subsektor = compare_with_subsektor()
+min_stocks_without_subsektor, details_without_subsektor = compare_without_subsektor()
 
-financial_table = pd.read_csv("financial_table.csv")
+# Fungsi untuk membuat DataFrame dari hasil perbandingan
+def create_result_df(sorted_stocks, details):
+    """
+    Membuat DataFrame dari hasil perbandingan.
+    """
+    data = []
+    for stock, _ in sorted_stocks:
+        row = {
+            'Kode': stock,
+            'Persentase RoA': details[stock]['RoA'],
+            'Persentase MC': details[stock]['Market Cap'],
+            'Persentase RoE': details[stock]['RoE']
+        }
+        data.append(row)
+    return pd.DataFrame(data)
 
-st.title("Analisis Saham & Value at Risk (VaR)")
-target_stock = st.text_input("Masukkan Kode Saham Target", "ANJT.JK")
+# Tampilkan hasil dengan subsektor jika ada
+st.header("Hasil dengan Mempertimbangkan Sub Sektor")
+if min_stocks_with_subsektor:
+    df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
+    st.write(df_with_subsektor)
+else:
+    st.write("Tidak ada hasil dalam subsektor yang sama.\n")
 
-if st.button("Analisis"):
-    (results_with_subsektor, freq_with_subsektor) = compare_stocks(target_stock, financial_table, consider_subsector=True)
-    (results_without_subsektor, freq_without_subsektor) = compare_stocks(target_stock, financial_table, consider_subsector=False)
-    
-    if results_with_subsektor and results_without_subsektor:
-        first_subsektor_stock = list(freq_with_subsektor.keys())[0]
-        first_not_subsektor_stock = list(freq_without_subsektor.keys())[0]
-
-        stock_list = [target_stock, first_subsektor_stock, first_not_subsektor_stock]
-        daily_returns = get_daily_returns(stock_list)
-
-        VaR_Subsektor = calculate_var(daily_returns[first_subsektor_stock])
-        VaR_Not_Subsektor = calculate_var(daily_returns[first_not_subsektor_stock])
-
-        result_df = pd.DataFrame({
-            f'Return {target_stock}': daily_returns[target_stock],
-            f'VaR {first_subsektor_stock}': VaR_Subsektor,
-            f'VaR {first_not_subsektor_stock}': VaR_Not_Subsektor
-        })
-        result_df['VR With Subsektor'] = (result_df.iloc[:, 0] < result_df.iloc[:, 1]).astype(int)
-        result_df['VR Without Subsektor'] = (result_df.iloc[:, 0] < result_df.iloc[:, 2]).astype(int)
-
-        VR_Subsektor = result_df.iloc[:, 3].sum() / result_df.iloc[:, 3].count()
-        VR_Not_Subsektor = result_df.iloc[:, 4].sum() / result_df.iloc[:, 4].count()
-
-        st.subheader("Hasil Analisis")
-        st.write(f"**Saham paling mirip dalam subsektor:** {first_subsektor_stock}")
-        st.write(f"**Saham paling mirip di luar subsektor:** {first_not_subsektor_stock}")
-        st.write(f"**VaR untuk {first_subsektor_stock} (dalam subsektor):** {VaR_Subsektor:.5f}")
-        st.write(f"**VaR untuk {first_not_subsektor_stock} (di luar subsektor):** {VaR_Not_Subsektor:.5f}")
-        st.write(f"**Violation Ratio dalam subsektor:** {VR_Subsektor:.5f}")
-        st.write(f"**Violation Ratio di luar subsektor:** {VR_Not_Subsektor:.5f}")
-        st.dataframe(result_df)
+# Tampilkan hasil tanpa subsektor
+st.header("Hasil tanpa Mempertimbangkan Sub Sektor")
+if min_stocks_without_subsektor:
+    df_without_subsektor = create_result_df(min_stocks_without_subsektor, details_without_subsektor)
+    st.write(df_without_subsektor)
+else:
+    st.write("Tidak ada hasil yang ditemukan.\n")
