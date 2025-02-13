@@ -138,6 +138,7 @@ if min_stocks_with_subsektor:
             plt.title(f"Perubahan Harga Saham {subsektor_stock}")
             plt.xlabel("Tanggal")
             plt.ylabel("Harga Penutupan")
+            plt.grid(True)
             plt.legend()
             st.pyplot(plt)
         except Exception as e:
@@ -169,6 +170,7 @@ if min_stocks_without_subsektor:
             plt.title(f"Perubahan Harga Saham {not_subsektor_stock}")
             plt.xlabel("Tanggal")
             plt.ylabel("Harga Penutupan")
+            plt.grid(True)
             plt.legend()
             st.pyplot(plt)
         except Exception as e:
