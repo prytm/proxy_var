@@ -1,7 +1,11 @@
 import streamlit as st
 import pandas as pd
+import yfinance as yf
+import matplotlib.pyplot as plt
 
-final_df = pd.read_csv('final_df.csv', delimiter = ',')
+# Load data
+final_df = pd.read_csv('final_df.csv', delimiter=',')
+final_df = pd.read_csv('final_df.csv', delimiter=',')  # Pastikan file ini ada
 
 # Judul Aplikasi
 st.title('Perbandingan Saham')
@@ -45,8 +49,8 @@ subsektor_options = [
 # Dropdown untuk memilih subsektor
 target_subsektor = st.selectbox("Sub Sektor Target:", options=subsektor_options, index=subsektor_options.index('Property & Real Estate'))
 
-# Konversi ke DataFrame (pastikan final_df sudah didefinisikan)
-comparison_table = pd.DataFrame(final_df)  # Ganti dengan data Anda
+# Konversi ke DataFrame
+comparison_table = pd.DataFrame(final_df)
 
 def calculate_percentage(filtered_table):
     """
@@ -115,7 +119,29 @@ def create_result_df(sorted_stocks, details):
 st.write("Hasil dengan Mempertimbangkan Sub Sektor")
 if min_stocks_with_subsektor:
     df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
-    st.write(df_with_subsektor)
+    
+    # Bagi layout menjadi dua kolom: DataFrame dan Plot
+    col_df, col_plot = st.columns(2)
+    
+    with col_df:
+        st.write(df_with_subsektor)
+    
+    with col_plot:
+        subsektor_stock = min_stocks_with_subsektor[0][0]
+        target_date_subsektor = final_df[final_df['Kode'] == subsektor_stock]['Date'].iloc[0]
+        
+        try:
+            st.write(f"Grafik Perubahan Harga Saham {subsektor_stock}")
+            data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1))['Close']
+            plt.figure(figsize=(10, 5))
+            plt.plot(data, label=subsektor_stock)
+            plt.title(f"Perubahan Harga Saham {subsektor_stock}")
+            plt.xlabel("Tanggal")
+            plt.ylabel("Harga Penutupan")
+            plt.legend()
+            st.pyplot(plt)
+        except Exception as e:
+            st.error(f"Error fetching data for {subsektor_stock}: {e}")
 else:
     st.write("Tidak ada hasil dalam subsektor yang sama.\n")
 
@@ -123,6 +149,28 @@ else:
 st.write("Hasil tanpa Mempertimbangkan Sub Sektor")
 if min_stocks_without_subsektor:
     df_without_subsektor = create_result_df(min_stocks_without_subsektor, details_without_subsektor)
-    st.write(df_without_subsektor)
+    
+    # Bagi layout menjadi dua kolom: DataFrame dan Plot
+    col_df, col_plot = st.columns(2)
+    
+    with col_df:
+        st.write(df_without_subsektor)
+    
+    with col_plot:
+        not_subsektor_stock = min_stocks_without_subsektor[0][0]
+        target_date_not_subsektor = final_df[final_df['Kode'] == not_subsektor_stock]['Date'].iloc[0]
+        
+        try:
+            st.write(f"Grafik Perubahan Harga Saham {not_subsektor_stock}")
+            data = yf.download(not_subsektor_stock, start=target_date_not_subsektor, end=pd.to_datetime(target_date_not_subsektor) + pd.DateOffset(years=1))['Close']
+            plt.figure(figsize=(10, 5))
+            plt.plot(data, label=not_subsektor_stock)
+            plt.title(f"Perubahan Harga Saham {not_subsektor_stock}")
+            plt.xlabel("Tanggal")
+            plt.ylabel("Harga Penutupan")
+            plt.legend()
+            st.pyplot(plt)
+        except Exception as e:
+            st.error(f"Error fetching data for {not_subsektor_stock}: {e}")
 else:
     st.write("Tidak ada hasil yang ditemukan.\n")
