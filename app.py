@@ -165,15 +165,18 @@ if min_stocks_without_subsektor:
             data = yf.download(not_subsektor_stock, start=target_date_not_subsektor, end=pd.to_datetime(target_date_not_subsektor) + pd.DateOffset(years=1))['Close']
             daily_returns_2 = data.pct_change().dropna()
             
-            if stock in [not_subsektor_stock]:
-                rolling_std_n = daily_returns_2[stock].rolling(window=10, min_periods=1).std() * 2
-                rolling_mean_n = daily_returns_2[stock].rolling(window=10, min_periods=1).mean()
-                upper_bound_n = rolling_mean_n + rolling_std_n
-                lower_bound_n = rolling_mean_n - rolling_std_n
-    
-                plt.fill_between(daily_returns_2.index, lower_bound_n, upper_bound_n, alpha=0.2)
-                plt.plot(daily_returns_2.index, upper_bound_n, linestyle='dashed', color='red', linewidth=1.1)
-                plt.plot(daily_returns_2.index, lower_bound_n, linestyle='dashed', color='red', linewidth=1.1)
+            for stock in not_subsektor_stock:
+            plt.plot(daily_returns_2[stock], label=stock)
+            
+                if stock in [not_subsektor_stock]:
+                    rolling_std_n = daily_returns_2[stock].rolling(window=10, min_periods=1).std() * 2
+                    rolling_mean_n = daily_returns_2[stock].rolling(window=10, min_periods=1).mean()
+                    upper_bound_n = rolling_mean_n + rolling_std_n
+                    lower_bound_n = rolling_mean_n - rolling_std_n
+        
+                    plt.fill_between(daily_returns_2.index, lower_bound_n, upper_bound_n, alpha=0.2)
+                    plt.plot(daily_returns_2.index, upper_bound_n, linestyle='dashed', color='red', linewidth=1.1)
+                    plt.plot(daily_returns_2.index, lower_bound_n, linestyle='dashed', color='red', linewidth=1.1)
             
             plt.figure(figsize=(10, 5))
             plt.plot(daily_returns_2, label=not_subsektor_stock)
