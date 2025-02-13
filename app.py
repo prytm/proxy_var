@@ -119,8 +119,8 @@ def calculate_bollinger_bands(data, window=10):
     """
     Menghitung Bollinger Bands.
     """
-    sma = data.rolling(window=window).mean()
-    std = data.rolling(window=window).std()
+    sma = data.rolling(window=window, min_periods = 1).mean()
+    std = data.rolling(window=window, min_periods = 1).std()
     upper_band = sma + (2 * std)
     lower_band = sma - (2 * std)
     return sma, upper_band, lower_band
