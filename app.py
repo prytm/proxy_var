@@ -198,11 +198,10 @@ if min_stocks_without_subsektor:
             plt.legend()
             st.pyplot(plt)
 
-st.write(f"Data shape: {data.shape}")
-st.write(f"SMA shape: {sma.shape}")
-st.write(f"Upper Band shape: {upper_band.shape}")
-st.write(f"Lower Band shape: {lower_band.shape}")
-
+            st.write(f"Data shape: {data.shape}")
+            st.write(f"SMA shape: {sma.shape}")
+            st.write(f"Upper Band shape: {upper_band.shape}")
+            st.write(f"Lower Band shape: {lower_band.shape}")
         except Exception as e:
             st.error(f"Error fetching data for {not_subsektor_stock}: {e}")
 else:
