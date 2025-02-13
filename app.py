@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 final_df = pd.read_csv('final_df.csv', delimiter=',')
 
 # Judul Aplikasi
-st.title('Perbandingan Saham')
+st.title('Risk Projection')
 
 # Input pengguna untuk target
-st.header("Masukkan Data Saham Target")
+st.header("Input Stock Target Data")
 
 # Menggunakan st.columns untuk mengatur layout
 col1, col2 = st.columns(2)  # Baris pertama: 2 kolom
@@ -18,13 +18,13 @@ col3, col4 = st.columns(2)  # Baris kedua: 2 kolom
 
 # Input di baris pertama
 with col1:
-    target_stock = st.text_input("Kode Saham Target (contoh: CBDK.JK):", value="CBDK.JK")
+    target_stock = st.text_input("Stock Target Code (ex: CBDK.JK):", value="CBDK.JK")
 with col2:
     target_roa = st.number_input("Return on Assets (RoA) Target (%):", value=14.69)
 
 # Input di baris kedua
 with col3:
-    target_mc = st.number_input("Market Cap Target (dalam Rupiah):", value=624462420000)
+    target_mc = st.number_input("Market Cap Target (in IDR):", value=624462420000)
 with col4:
     target_roe = st.number_input("Return on Equity (RoE) Target (%):", value=35.61)
 
@@ -126,13 +126,12 @@ def calculate_bollinger_bands(data, window=15):
     return sma, upper_band, lower_band
 
 # Tampilkan hasil dengan subsektor jika ada
-st.write("Hasil dengan Mempertimbangkan Sub Sektor")
+st.write("Results considering Sub-Sector")
 if min_stocks_with_subsektor:
     df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
     col_df, col_plot = st.columns(2)
 
     with col_df:
-        st.write("Data dengan Sub Sektor:")
         st.dataframe(df_with_subsektor, use_container_width=True)  # Perbaikan di sini
 
     with col_plot:
@@ -140,7 +139,7 @@ if min_stocks_with_subsektor:
         target_date_subsektor = final_df[final_df['Kode'] == subsektor_stock]['Date'].iloc[0]
 
         try:
-            st.write(f"Grafik Perubahan Harga Saham {subsektor_stock}")
+            st.write(f"Daily Returns Graph; {subsektor_stock}")
             data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1))['Close']
             daily_returns_1 = data.pct_change().dropna()
 
@@ -158,8 +157,8 @@ if min_stocks_with_subsektor:
             plt.plot(upper_band, label='Upper Band', linestyle='dashed', linewidth=1.1)
             plt.plot(lower_band, label='Lower Band', linestyle='dashed', linewidth=1.1)
             plt.fill_between(daily_returns_1.index, lower_band, upper_band, color='gray', alpha=0.2)
-            plt.title(f"Perubahan Harga Saham {subsektor_stock} dengan Bollinger Bands")
-            plt.xlabel("Tanggal")
+            plt.title(f"{subsektor_stock} Daily Returns")
+            plt.xlabel("Date")
             plt.ylabel("Daily Returns")
             plt.legend()
             plt.grid(True)
@@ -170,7 +169,7 @@ else:
     st.write("Tidak ada hasil dalam subsektor yang sama.\n")
 
 # Bagian tanpa subsektor
-st.write("Hasil tanpa Mempertimbangkan Sub Sektor")
+st.write("Results without considering Sub-Sector")
 if min_stocks_without_subsektor:
     df_without_subsektor = create_result_df(min_stocks_without_subsektor, details_without_subsektor)
 
@@ -178,7 +177,6 @@ if min_stocks_without_subsektor:
     col_df, col_plot = st.columns(2)
 
     with col_df:
-        st.write("Data tanpa Sub Sektor:")
         st.dataframe(df_without_subsektor, use_container_width=True)  # Perbaikan di sini
 
     with col_plot:
@@ -186,7 +184,7 @@ if min_stocks_without_subsektor:
         target_date_not_subsektor = final_df[final_df['Kode'] == not_subsektor_stock]['Date'].iloc[0]
 
         try:
-            st.write(f"Grafik Perubahan Harga Saham {not_subsektor_stock}")
+            st.write(f"Daily Returns Graph; {not_subsektor_stock}")
             data = yf.download(not_subsektor_stock, start=target_date_not_subsektor, end=pd.to_datetime(target_date_not_subsektor) + pd.DateOffset(years=1))['Close']
             daily_returns_2 = data.pct_change().dropna()
 
@@ -204,8 +202,8 @@ if min_stocks_without_subsektor:
             plt.plot(upper_band, label='Upper Band', linestyle='dashed', linewidth=1.1)
             plt.plot(lower_band, label='Lower Band', linestyle='dashed', linewidth=1.1)
             plt.fill_between(daily_returns_2.index, lower_band, upper_band, color='gray', alpha=0.2)
-            plt.title(f"Perubahan Harga Saham {not_subsektor_stock} dengan Bollinger Bands")
-            plt.xlabel("Tanggal")
+            plt.title(f"{not_subsektor_stock} Daily Returns")
+            plt.xlabel("Date")
             plt.ylabel("Daily Returns")
             plt.legend()
             plt.grid(True)
