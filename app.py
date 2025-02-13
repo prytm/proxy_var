@@ -134,7 +134,7 @@ if min_stocks_with_subsektor:
     col_df, col_plot = st.columns(2)
     
     with col_df:
-        st.write(df_with_subsektor)
+        st.dataframe(df_with_subsektor)
     
     with col_plot:
         subsektor_stock = min_stocks_with_subsektor[0][0]
@@ -179,7 +179,7 @@ if min_stocks_without_subsektor:
     col_df, col_plot = st.columns(2)
     
     with col_df:
-        st.write(df_without_subsektor)
+        st.dataframe(df_without_subsektor)
     
     with col_plot:
         not_subsektor_stock = min_stocks_without_subsektor[0][0]
