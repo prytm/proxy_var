@@ -191,12 +191,13 @@ if min_stocks_without_subsektor:
             plt.plot(sma, label='SMA (20)')
             plt.plot(upper_band, label='Upper Band')
             plt.plot(lower_band, label='Lower Band')
-            plt.fill_between(daily_returns_2.index, lower_band, upper_band, color='gray', alpha=0.3)
+            plt.fill_between(daily_returns_2.index, lower_band, upper_band, color='gray', alpha=0.2)
             plt.title(f"Perubahan Harga Saham {not_subsektor_stock} dengan Bollinger Bands")
             plt.xlabel("Tanggal")
             plt.ylabel("Harga Penutupan")
             plt.legend()
             st.pyplot(plt)
+            print(type(daily_returns_2, daily_returns_2.shape)
         except Exception as e:
             st.error(f"Error fetching data for {not_subsektor_stock}: {e}")
 else:
