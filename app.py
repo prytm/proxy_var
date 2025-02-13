@@ -112,7 +112,7 @@ def create_result_df(sorted_stocks, details):
     return pd.DataFrame(data)
 
 # Tampilkan hasil dengan subsektor jika ada
-st.header("Hasil dengan Mempertimbangkan Sub Sektor")
+st.write("Hasil dengan Mempertimbangkan Sub Sektor")
 if min_stocks_with_subsektor:
     df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
     st.write(df_with_subsektor)
@@ -120,7 +120,7 @@ else:
     st.write("Tidak ada hasil dalam subsektor yang sama.\n")
 
 # Tampilkan hasil tanpa subsektor
-st.header("Hasil tanpa Mempertimbangkan Sub Sektor")
+st.write("Hasil tanpa Mempertimbangkan Sub Sektor")
 if min_stocks_without_subsektor:
     df_without_subsektor = create_result_df(min_stocks_without_subsektor, details_without_subsektor)
     st.write(df_without_subsektor)
