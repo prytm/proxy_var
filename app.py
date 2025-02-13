@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 
+final_df = pd.read_csv('final_df.csv', delimiter = ',')
+
 # Judul Aplikasi
 st.title('Perbandingan Saham')
 
