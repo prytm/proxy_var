@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 
-final_df = pd.read_csv('final_df.csv', delimiter = ',')
-
 # Judul Aplikasi
 st.title('Perbandingan Saham')
 
@@ -104,15 +102,15 @@ def create_result_df(sorted_stocks, details):
     for stock, _ in sorted_stocks:
         row = {
             'Kode': stock,
-            'Persentase RoA': details[stock]['RoA'],
-            'Persentase MC': details[stock]['Market Cap'],
-            'Persentase RoE': details[stock]['RoE']
+            'RoA': f"{details[stock]['RoA']:.2f}%",
+            'Market Cap': f"{details[stock]['Market Cap']:.2f}%",
+            'RoE': f"{details[stock]['RoE']:.2f}%"
         }
         data.append(row)
     return pd.DataFrame(data)
 
 # Tampilkan hasil dengan subsektor jika ada
-st.write("Hasil dengan Mempertimbangkan Sub Sektor")
+st.header("Hasil dengan Mempertimbangkan Sub Sektor")
 if min_stocks_with_subsektor:
     df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
     st.write(df_with_subsektor)
@@ -120,7 +118,7 @@ else:
     st.write("Tidak ada hasil dalam subsektor yang sama.\n")
 
 # Tampilkan hasil tanpa subsektor
-st.write("Hasil tanpa Mempertimbangkan Sub Sektor")
+st.header("Hasil tanpa Mempertimbangkan Sub Sektor")
 if min_stocks_without_subsektor:
     df_without_subsektor = create_result_df(min_stocks_without_subsektor, details_without_subsektor)
     st.write(df_without_subsektor)
