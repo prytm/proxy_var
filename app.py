@@ -220,6 +220,13 @@ if page == "Risk Projection":
     else:
         st.write("Tidak ada hasil yang ditemukan.\n")
 
+    df_var = pd.read_csv('df_var.csv')
+    subsektor_data = df_var[df_var['Kode'] == subsektor_stock]
+    not_subsektor_data = df_var[df_var['Kode'] == not_subsektor_stock]
+
+    result_df = pd.concat([subsektor_data, not_subsektor_data], axis=0)
+    st.write(result_df)
+
 elif page == "Page 2":
     st.title("Page 2")
     st.write("This is Page 2. You can add your content here.")
