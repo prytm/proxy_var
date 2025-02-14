@@ -220,6 +220,7 @@ if page == "Risk Projection":
     else:
         st.write("Tidak ada hasil yang ditemukan.\n")
 
+    st.write("Risk Projection")
     df_var = pd.read_csv('df_var.csv')
     subsektor_data = df_var[df_var['Kode'] == subsektor_stock]
     not_subsektor_data = df_var[df_var['Kode'] == not_subsektor_stock]
