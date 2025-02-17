@@ -146,7 +146,7 @@ if page == "Risk Projection":
 
             try:
                 st.write(f"Daily Returns Graph; {subsektor_stock}")
-                data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1))['Close']
+                data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1), interval = '1wk')['Close']
                 daily_returns_1 = data.pct_change().dropna()
 
                 # Hitung Bollinger Bands
@@ -192,7 +192,7 @@ if page == "Risk Projection":
 
             try:
                 st.write(f"Daily Returns Graph; {not_subsektor_stock}")
-                data = yf.download(not_subsektor_stock, start=target_date_not_subsektor, end=pd.to_datetime(target_date_not_subsektor) + pd.DateOffset(years=1))['Close']
+                data = yf.download(not_subsektor_stock, start=target_date_not_subsektor, end=pd.to_datetime(target_date_not_subsektor) + pd.DateOffset(years=1),interval = '1wk')['Close']
                 daily_returns_2 = data.pct_change().dropna()
 
                 # Hitung Bollinger Bands
