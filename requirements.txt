@@ -3,4 +3,4 @@ pandas
 numpy
 matplotlib
 mahalanobis
-pip install scipy.spatial.distance
+scipy
