@@ -120,7 +120,7 @@ if page == "Risk Projection":
         for stock, _ in sorted_stocks:
             row = {
                 'Kode': stock,
-                'Distance': f"{[details][stock]['distance']:.2f}%",
+                'Distance': f"{details[stock]['distance']:.2f}%",
             }
             data.append(row)
         return pd.DataFrame(data)
