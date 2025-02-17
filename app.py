@@ -83,7 +83,7 @@ if page == "Risk Projection":
             distance_details[row['Kode']] = distance
     
         # Urutkan berdasarkan jarak terkecil
-        sorted_distances = sorted(distance_details.items(), key=lambda x: x[1])
+        sorted_distances = sorted(distance_details.items(), key=lambda x: x[1])[:3]
     
         return sorted_distances, distance_details
     
