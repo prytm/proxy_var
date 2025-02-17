@@ -109,8 +109,8 @@ if page == "Risk Projection":
     
         return calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe)
 
-    min_stocks_with_subsektor, details_with_subsektor = compare_with_subsektor()
-    min_stocks_without_subsektor, details_without_subsektor = compare_without_subsektor()
+    min_stocks_with_subsektor, details_with_subsektor = compare_with_subsektor(comparison_table, target_subsektor, target_stock, target_roa, target_mc, target_roe)
+    min_stocks_without_subsektor, details_without_subsektor = compare_without_subsektor(comparison_table, target_subsektor, target_stock, target_roa, target_mc, target_roe)
     
     # Fungsi untuk membuat DataFrame dari hasil perbandingan
     def create_result_df(sorted_stocks, details):
