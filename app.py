@@ -57,32 +57,32 @@ if page == "Risk Projection":
     comparison_table = pd.DataFrame(final_df)
 
     def calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe):
-    """
-    Menghitung Mahalanobis Distance antara saham target dan saham lainnya.
-    """
-    features = ['RoA', 'Market Cap', 'RoE']
-    data = filtered_table[features]
-
-    # Hitung matriks kovarians dan inversinya (gunakan pseudo-inverse)
-    cov_matrix = np.cov(data.T)
-    inv_cov_matrix = np.linalg.pinv(cov_matrix)  # Gunakan pseudo-inverse agar tetap bisa dihitung
-
-    # Buat vektor saham target
-    target_vector = np.array([target_roa, target_mc, target_roe])
-
-    # Dictionary untuk menyimpan jarak Mahalanobis
-    distance_details = {}
-
-    # Hitung Mahalanobis Distance untuk setiap saham
-    for index, row in filtered_table.iterrows():
-        stock_vector = np.array(row[features])
-        distance = mahalanobis(stock_vector, target_vector, inv_cov_matrix)
-        distance_details[row['Kode']] = distance
-
-    # Urutkan berdasarkan jarak terkecil
-    sorted_distances = sorted(distance_details.items(), key=lambda x: x[1])
-
-    return sorted_distances, distance_details
+        """
+        Menghitung Mahalanobis Distance antara saham target dan saham lainnya.
+        """
+        features = ['RoA', 'Market Cap', 'RoE']
+        data = filtered_table[features]
+    
+        # Hitung matriks kovarians dan inversinya (gunakan pseudo-inverse)
+        cov_matrix = np.cov(data.T)
+        inv_cov_matrix = np.linalg.pinv(cov_matrix)  # Gunakan pseudo-inverse agar tetap bisa dihitung
+    
+        # Buat vektor saham target
+        target_vector = np.array([target_roa, target_mc, target_roe])
+    
+        # Dictionary untuk menyimpan jarak Mahalanobis
+        distance_details = {}
+    
+        # Hitung Mahalanobis Distance untuk setiap saham
+        for index, row in filtered_table.iterrows():
+            stock_vector = np.array(row[features])
+            distance = mahalanobis(stock_vector, target_vector, inv_cov_matrix)
+            distance_details[row['Kode']] = distance
+    
+        # Urutkan berdasarkan jarak terkecil
+        sorted_distances = sorted(distance_details.items(), key=lambda x: x[1])
+    
+        return sorted_distances, distance_details
 
     def compare_with_subsektor():
         """
