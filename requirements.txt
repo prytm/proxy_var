@@ -3,3 +3,4 @@ pandas
 numpy
 matplotlib
 mahalanobis
+scipy.spatial.distance
