@@ -56,29 +56,33 @@ if page == "Risk Projection":
     # Konversi ke DataFrame
     comparison_table = pd.DataFrame(final_df)
 
-    def calculate_percentage(filtered_table):
-        """
-        Menghitung persentase perbedaan dengan saham target.
-        """
-        total_percentage = {}
-        percentage_details = {}
+    def calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe):
+    """
+    Menghitung Mahalanobis Distance antara saham target dan saham lainnya.
+    """
+    features = ['RoA', 'Market Cap', 'RoE']
+    data = filtered_table[features]
 
-        for metric, target_value in zip(['RoA', 'Market Cap', 'RoE'], [target_roa, target_mc, target_roe]):
-            differences = abs(filtered_table[metric] - target_value)
-            percentage = (differences / abs(target_value)) * 100  # Gunakan abs untuk menghindari pembagian negatif
-            filtered_table[f'{metric}_Percentage'] = percentage
+    # Hitung matriks kovarians dan inversinya (gunakan pseudo-inverse)
+    cov_matrix = np.cov(data.T)
+    inv_cov_matrix = np.linalg.pinv(cov_matrix)  # Gunakan pseudo-inverse agar tetap bisa dihitung
 
-            for stock, percent in zip(filtered_table['Kode'], percentage):
-                if stock not in total_percentage:
-                    total_percentage[stock] = 0
-                    percentage_details[stock] = {}
-                total_percentage[stock] += percent
-                percentage_details[stock][metric] = percent
+    # Buat vektor saham target
+    target_vector = np.array([target_roa, target_mc, target_roe])
 
-        # Urutkan berdasarkan total persentase terkecil (mendekati 0)
-        sorted_total = sorted(total_percentage.items(), key=lambda x: abs(x[1]))[:3]
+    # Dictionary untuk menyimpan jarak Mahalanobis
+    distance_details = {}
 
-        return sorted_total, percentage_details
+    # Hitung Mahalanobis Distance untuk setiap saham
+    for index, row in filtered_table.iterrows():
+        stock_vector = np.array(row[features])
+        distance = mahalanobis(stock_vector, target_vector, inv_cov_matrix)
+        distance_details[row['Kode']] = distance
+
+    # Urutkan berdasarkan jarak terkecil
+    sorted_distances = sorted(distance_details.items(), key=lambda x: x[1])
+
+    return sorted_distances, distance_details
 
     def compare_with_subsektor():
         """
@@ -87,18 +91,18 @@ if page == "Risk Projection":
         filtered_table = comparison_table[(comparison_table['Sub Sektor'] == target_subsektor) &
                                           (comparison_table['Kode'] != target_stock)]
         if filtered_table.empty:
-            st.warning(f"Warning: Tidak ada saham lain dalam subsektor {target_subsektor} untuk dibandingkan.\n")
+            print(f"Warning: Tidak ada saham lain dalam subsektor {target_subsektor} untuk dibandingkan.\n")
             return [], {}
-
-        return calculate_percentage(filtered_table)
-
+    
+        return calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe)
+    
     def compare_without_subsektor():
         """
         Membandingkan dengan semua saham tanpa mempertimbangkan subsektor.
         """
         filtered_table = comparison_table[comparison_table['Kode'] != target_stock]
-        return calculate_percentage(filtered_table)
-
+        return calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe)
+    
     # Jalankan perbandingan
     min_stocks_with_subsektor, details_with_subsektor = compare_with_subsektor()
     min_stocks_without_subsektor, details_without_subsektor = compare_without_subsektor()
@@ -112,9 +116,7 @@ if page == "Risk Projection":
         for stock, _ in sorted_stocks:
             row = {
                 'Kode': stock,
-                'RoA': f"{details[stock]['RoA']:.2f}%",
-                'Market Cap': f"{details[stock]['Market Cap']:.2f}%",
-                'RoE': f"{details[stock]['RoE']:.2f}%"
+                'Distance': f"{distance:.2f}%",
             }
             data.append(row)
         return pd.DataFrame(data)
