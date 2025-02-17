@@ -3,6 +3,7 @@ import pandas as pd
 import yfinance as yf
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.spatial.distance import mahalanobis
 
 # Load data
 final_df = pd.read_csv('final_df.csv', delimiter=',')
