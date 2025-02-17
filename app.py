@@ -58,6 +58,7 @@ if page == "Risk Projection":
 
     # Konversi ke DataFrame
     comparison_table = pd.DataFrame(final_df)
+    
     def calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe):
         """
         Menghitung Mahalanobis Distance antara saham target dan saham lainnya.
@@ -86,7 +87,7 @@ if page == "Risk Projection":
     
         return sorted_distances, distance_details
     
-    def compare_with_subsektor(comparison_table, target_subsektor, target_stock, target_roa, target_mc, target_roe):
+    def compare_with_subsektor():
         """
         Membandingkan dengan saham dalam subsektor yang sama.
         """
@@ -98,7 +99,7 @@ if page == "Risk Projection":
     
         return calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe)
     
-    def compare_without_subsektor(comparison_table, target_stock, target_roa, target_mc, target_roe):
+    def compare_without_subsektor():
         """
         Membandingkan dengan semua saham tanpa mempertimbangkan subsektor.
         """
@@ -109,8 +110,8 @@ if page == "Risk Projection":
     
         return calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe)
 
-    min_stocks_with_subsektor, details_with_subsektor = compare_with_subsektor(comparison_table, target_subsektor, target_stock, target_roa, target_mc, target_roe)
-    min_stocks_without_subsektor, details_without_subsektor = compare_without_subsektor(comparison_table, target_subsektor, target_stock, target_roa, target_mc, target_roe)
+    min_stocks_with_subsektor, details_with_subsektor = compare_with_subsektor()
+    min_stocks_without_subsektor, details_without_subsektor = compare_without_subsektor()
     
     # Fungsi untuk membuat DataFrame dari hasil perbandingan
     def create_result_df(sorted_stocks, details):
