@@ -65,11 +65,11 @@ if page == "Risk Projection":
         Menghitung Mahalanobis Distance antara saham target dan saham lainnya.
         """
         features = ['RoA', 'Market Cap', 'RoE']
-        data = filtered_table[features]
-    
+        data = filtered_table[features].dropna()  # Hindari NaN
+        
         # Hitung matriks kovarians dan inversinya (gunakan pseudo-inverse)
-        cov_matrix = np.cov(data.T)
-        inv_cov_matrix = np.linalg.pinv(cov_matrix)  # Gunakan pseudo-inverse agar tetap bisa dihitung
+        cov_matrix = np.cov(data.T) + np.eye(len(features)) * 1e-6  # Hindari singular matrix
+        inv_cov_matrix = np.linalg.pinv(cov_matrix)  # Pseudo-inverse
     
         # Buat vektor saham target
         target_vector = np.array([target_roa, target_mc, target_roe])
@@ -87,8 +87,8 @@ if page == "Risk Projection":
         sorted_distances = sorted(distance_details.items(), key=lambda x: x[1])
     
         return sorted_distances, distance_details
-
-    def compare_with_subsektor():
+    
+    def compare_with_subsektor(comparison_table, target_subsektor, target_stock, target_roa, target_mc, target_roe):
         """
         Membandingkan dengan saham dalam subsektor yang sama.
         """
@@ -100,17 +100,13 @@ if page == "Risk Projection":
     
         return calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe)
     
-    def compare_without_subsektor():
+    def compare_without_subsektor(comparison_table, target_stock, target_roa, target_mc, target_roe):
         """
         Membandingkan dengan semua saham tanpa mempertimbangkan subsektor.
         """
         filtered_table = comparison_table[comparison_table['Kode'] != target_stock]
         return calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe)
     
-    # Jalankan perbandingan
-    min_stocks_with_subsektor, details_with_subsektor = compare_with_subsektor()
-    min_stocks_without_subsektor, details_without_subsektor = compare_without_subsektor()
-
     # Fungsi untuk membuat DataFrame dari hasil perbandingan
     def create_result_df(sorted_stocks, details):
         """
@@ -123,6 +119,7 @@ if page == "Risk Projection":
                 'Distance': f"{details[stock]:.2f}%",
             }
             data.append(row)
+        
         return pd.DataFrame(data)
 
     # Fungsi untuk menghitung Bollinger Bands
