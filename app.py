@@ -193,7 +193,7 @@ input_data = {
 input_df = pd.DataFrame(input_data)
 st.table(input_df)
 
-# Display VaR 1% and aR 99%
+# Display VaR 1% and VaR 99%
 col1, col2 = st.columns([1,1], gap = "small")
 
 with col1:
@@ -212,12 +212,14 @@ with col2:
     st.markdown(f"""
         <div class = "metric-container metric-99">
             <div>
-                <div class = "metric-label">VaR 1%</div>
+                <div class = "metric-label">VaR 99%</div>
                 <div class = "metric-value">{var_99:.2f}</div>
             </div>
         </div>
     """, unsafe_allow_html = True)
 
+st.markdown("")
+st.markdown("")
 st.write("Results considering Sub-Sector")
 if min_stocks_with_subsektor:
     df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
