@@ -91,7 +91,7 @@ with st.sidebar:
     # Dropdown untuk memilih subsektor
     target_subsektor = st.selectbox("Sub Sektor Target:", options=subsektor_options, index=subsektor_options.index('Property & Real Estate'))
 
-    # Konversi ke DataFrame
+# Konversi ke DataFrame
 comparison_table = pd.DataFrame(final_df)
     
 def calculate_mahalanobis_distance(filtered_table, target_aset, target_mc, target_eku, target_laba):
@@ -174,7 +174,20 @@ def calculate_bollinger_bands(data, window=15):
     lower_band = sma - (2 * std)
     return sma, upper_band, lower_band
 
-    # Tampilkan hasil dengan subsektor jika ada
+# Tampilkan hasil dengan subsektor jika ada
+st.title("Mahalanobis Risk-Projection Model")
+
+# Tabel Input
+input_data = {
+    "Stock" : [target_stock],
+    "Total Assets" : [target_aset],
+    "Market Cap" : [market_cap],
+    "Total Equities" : [target_eku],
+    "Net Income" : [target_laba]
+}
+input_df = pd.DataFrame(input_data)
+st.table(input_df)
+
 st.write("Results considering Sub-Sector")
 if min_stocks_with_subsektor:
     df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
