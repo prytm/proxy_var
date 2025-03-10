@@ -221,6 +221,10 @@ with col2:
 
 st.markdown("")
 st.markdown("")
+
+st.title("Daily Returns Plot")
+st.info("Explore how the proxy returns fluctuate one year after IPO")
+
 st.write("Results considering Sub-Sector")
 if min_stocks_with_subsektor:
     df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
