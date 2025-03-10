@@ -71,7 +71,7 @@ with st.sidebar:
     target_aset = st.number_input("Total Aset Target (in IDR):", value=18156999226)
     target_eku = st.number_input("Total Ekuitas Target (in IDR):", value=8142575417)
     target_mc = st.number_input("Market Cap Target (in IDR):", value=2301591670000)
-    target_laba = st.number_input("Laba Bersih Periode Tahun Berjalan (in IDR):", value=479102365)
+    target_laba = st.number_input("net Profit Current Year Period (in IDR):", value=479102365)
     
     # Daftar pilihan subsektor
     subsektor_options = [
