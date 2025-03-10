@@ -248,9 +248,9 @@ try:
     plt.plot(lower_band, label='Lower Band', linestyle='dashed', linewidth=1.1, color='red', alpha = 0.5)
     plt.fill_between(daily_returns_1.index, lower_band, upper_band, color='gray', alpha=0.2)
     
-    plt.title(f"{subsektor_stock} Daily Returns", color='white')
+    plt.title(f"{subsektor_stock} Weekly Returns", color='white')
     plt.xlabel("Date", color='white')
-    plt.ylabel("Daily Returns", color='white')
+    plt.ylabel("Weekly Returns", color='white')
     plt.tick_params(colors='white')  # Warna sumbu x & y
     plt.legend()
     plt.grid(True, color='gray', alpha = 0.5)
