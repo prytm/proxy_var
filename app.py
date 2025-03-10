@@ -30,14 +30,14 @@ st.markdown("""
 }
 
 /* Custom classes for CALL and PUT values */
-.metric-call {
+.metric-99 {
     background-color: #90ee90; /* Light green background */
     color: black; /* Black font color */
     margin-right: 10px; /* Spacing between CALL and PUT */
     border-radius: 10px; /* Rounded corners */
 }
 
-.metric-put {
+.metric-1 {
     background-color: #ffcccb; /* Light red background */
     color: black; /* Black font color */
     border-radius: 10px; /* Rounded corners */
@@ -199,10 +199,21 @@ col1, col2 = st.columns([1,1], gap = "small")
 with col1:
     # Using the custom class for CALL value
     st.markdown(f"""
-        <div class = "metric-container metric-call">
+        <div class = "metric-container metric-1">
             <div>
                 <div class = "metric-label">VaR 1%</div>
                 <div class = "metric-value">{var_1:.2f}</div>
+            </div>
+        </div>
+    """, unsafe_allow_html = True)
+
+with col2:
+    # Using the custom class for CALL value
+    st.markdown(f"""
+        <div class = "metric-container metric-99">
+            <div>
+                <div class = "metric-label">VaR 1%</div>
+                <div class = "metric-value">{var_99:.2f}</div>
             </div>
         </div>
     """, unsafe_allow_html = True)
