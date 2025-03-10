@@ -269,5 +269,15 @@ df_var = pd.read_csv('df_var_99.csv')
 subsektor_data = df_var[df_var['Kode'] == subsektor_stock]
 not_subsektor_data = df_var[df_var['Kode'] == not_subsektor_stock]
 
-result_df = pd.concat([subsektor_data, not_subsektor_data], axis=0)
+# Ganti dengan DataFrame kosong jika tidak ditemukan atau mengandung NA
+if subsektor_data.empty or subsektor_data.isna().values.any():
+    st.warning("Data subsektor kosong atau mengandung NA.")
+    subsektor_data = pd.DataFrame(columns=df_var.columns)
+
+if not_subsektor_data.empty or not_subsektor_data.isna().values.any():
+    st.warning("Data non-subsektor kosong atau mengandung NA.")
+    not_subsektor_data = pd.DataFrame(columns=df_var.columns)
+
+# Gabungkan (aman meski salah satu kosong)
+result_df = pd.concat([subsektor_data, not_subsektor_data], axis=0).reset_index(drop=True)
 st.write(result_df)
