@@ -98,7 +98,7 @@ def calculate_mahalanobis_distance(filtered_table, target_aset, target_mc, targe
     """
     Menghitung Mahalanobis Distance antara saham target dan saham lainnya.
     """
-    features = ['Total Aset', 'Market Cap', 'Total Ekuitas', 'laba Bersih']
+    features = ['Total Aset', 'Market Cap', 'Total Ekuitas', 'Laba Bersih']
     data = filtered_table[features]
     
     # Hitung matriks kovarians dan inversinya (gunakan pseudo-inverse)
