@@ -68,8 +68,8 @@ with st.sidebar:
     st.markdown(f'<a href="{linkedin_url}" target="_blank" style="text-decoration: none; color: inherit;"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="25" height="25" style="vertical-align: middle; margin-right: 10px;">`Priya Tammam`</a>', unsafe_allow_html=True)
 
     target_stock = st.text_input("Stock Target Code (ex: CBDK.JK):", value = "CBDK.JK")
-    target_aset = st.number_input("Total Aset Target (in IDR):", value=18156999226)
-    target_eku = st.number_input("Total Ekuitas Target (in IDR):", value=8142575417)
+    target_aset = st.number_input("Total Assets Target (in IDR):", value=18156999226)
+    target_eku = st.number_input("Total Equities Target (in IDR):", value=8142575417)
     target_mc = st.number_input("Market Cap Target (in IDR):", value=2301591670000)
     target_laba = st.number_input("net Profit Current Year Period (in IDR):", value=479102365)
     
