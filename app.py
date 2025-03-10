@@ -153,6 +153,8 @@ subsektor_data = df_var[df_var['Kode'] == subsektor_stock]
 var_1 = subsektor_data['Var_1%'].values
 var_99 = subsektor_data['Var_99%']
 
+st.write(var_1)
+
 # Fungsi untuk membuat DataFrame dari hasil perbandingan
 def create_result_df(sorted_stocks, details):
     """
