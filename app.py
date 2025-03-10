@@ -94,7 +94,7 @@ with st.sidebar:
     # Konversi ke DataFrame
 comparison_table = pd.DataFrame(final_df)
     
-def calculate_mahalanobis_distance(filtered_table, target_roa, target_mc, target_roe):
+def calculate_mahalanobis_distance(filtered_table, target_aset, target_mc, target_eku, target_laba):
     """
     Menghitung Mahalanobis Distance antara saham target dan saham lainnya.
     """
