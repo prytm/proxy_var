@@ -202,7 +202,7 @@ with col1:
         <div class = "metric-container metric-call">
             <div>
                 <div class = "metric-label">VaR 1%</div>
-                <div class = "metric-value">${var_1:.2f}</div>
+                <div class = "metric-value">${var_1}</div>
             </div>
         </div>
     """, unsafe_allow_html = True)
