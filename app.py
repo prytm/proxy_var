@@ -222,7 +222,7 @@ with col2:
 st.markdown("")
 st.markdown("")
 
-st.title("Weekly Returns Plot Projection")
+st.header("Weekly Returns Plot Projection")
 st.info("Explore how the weekly returns projection with 95% confidence interval MA fluctuate one year after IPO")
 
 subsektor_stock = min_stocks_with_subsektor[0][0]
