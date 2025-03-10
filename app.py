@@ -150,8 +150,8 @@ min_stocks_without_subsektor, details_without_subsektor = compare_without_subsek
 
 subsektor_stock = min_stocks_with_subsektor[0][0]
 subsektor_data = df_var[df_var['Kode'] == subsektor_stock]
-var_1 = print(subsektor_data['Var_1%'])
-var_99 = subsektor_data['Var_99%']
+var_1 = subsektor_data['Var_1%'].values[0]
+var_99 = subsektor_data['Var_99%'].values[0]
 
 # Fungsi untuk membuat DataFrame dari hasil perbandingan
 def create_result_df(sorted_stocks, details):
@@ -202,7 +202,7 @@ with col1:
         <div class = "metric-container metric-call">
             <div>
                 <div class = "metric-label">VaR 1%</div>
-                <div class = "metric-value">${var_1}</div>
+                <div class = "metric-value">${var_1:.2f}</div>
             </div>
         </div>
     """, unsafe_allow_html = True)
