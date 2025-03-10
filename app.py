@@ -12,7 +12,7 @@ df_var = pd.read_csv('df_var_99.csv', delimiter = ',')
 
 st.set_page_config(
     page_title="Risk Projection",
-    page_icon="📉",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded")
 
@@ -202,7 +202,7 @@ with col1:
     st.markdown(f"""
         <div class = "metric-container metric-1">
             <div>
-                <div class = "metric-label">Value at Risk 1%</div>
+                <div class = "metric-label">📉 Value at Risk 1%</div>
                 <div class = "metric-value">{var_1:.2f}</div>
             </div>
         </div>
@@ -213,7 +213,7 @@ with col2:
     st.markdown(f"""
         <div class = "metric-container metric-99">
             <div>
-                <div class = "metric-label">Value at Risk 99%</div>
+                <div class = "metric-label">📈 Value at Risk 99%</div>
                 <div class = "metric-value">{var_99:.2f}</div>
             </div>
         </div>
