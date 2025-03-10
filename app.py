@@ -265,7 +265,7 @@ if min_stocks_with_subsektor:
     st.dataframe(df_with_subsektor, use_container_width=True)  # Perbaikan di sini
 
 # Bagian tanpa subsektor
-st.write("Closest stocks considering Sub-Sector")
+st.write("Closest stocks without considering Sub-Sector")
 if min_stocks_without_subsektor:
     df_without_subsektor = create_result_df(min_stocks_without_subsektor, details_without_subsektor)
     st.dataframe(df_without_subsektor, use_container_width=True)  # Perbaikan di sini
