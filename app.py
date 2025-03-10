@@ -195,7 +195,7 @@ input_df = pd.DataFrame(input_data)
 st.table(input_df)
 
 # Display VaR 1% and VaR 99%
-col1, col2 = st.columns([1,1], gap = "small")
+col1, col2 = st.columns([1,1])
 
 with col1:
     # Using the custom class for CALL value
