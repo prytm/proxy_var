@@ -129,8 +129,7 @@ def compare_with_subsektor():
     filtered_table = comparison_table[(comparison_table['Sub Sektor'] == target_subsektor) & 
                                       (comparison_table['Kode'] != target_stock)]
     if filtered_table.empty:
-        print(f"Warning: Tidak ada saham lain dalam subsektor {target_subsektor} untuk dibandingkan.\n")
-        return [], {}
+        filtered_table = comparison_table[ (comparison_table['Kode'] != target_stock)]
     
     return calculate_mahalanobis_distance(filtered_table, target_aset, target_mc, target_eku, target_laba)
     
