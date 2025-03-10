@@ -259,6 +259,8 @@ except Exception as e:
     st.error(f"Error fetching data for {subsektor_stock}: {e}")
     st.write("Tidak ada hasil")
 
+st.header("Closest Stocks")
+
 st.write("Closest stocks considering Sub-Sector")
 if min_stocks_with_subsektor:
     df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
