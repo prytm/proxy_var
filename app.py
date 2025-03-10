@@ -24,9 +24,9 @@ st.markdown("""
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 8px; /* Adjust the padding to control height */
-    width: auto; /* Auto width for responsiveness, or set a fixed width if necessary */
-    margin: 0 auto; /* Center the container */
+    padding: 8px;
+    width: 200px; /* 👉 Ubah ini jadi nilai tetap misalnya 200px */
+    margin: 0 auto;
 }
 
 /* Custom classes for CALL and PUT values */
