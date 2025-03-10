@@ -132,7 +132,7 @@ def compare_with_subsektor():
         print(f"Warning: Tidak ada saham lain dalam subsektor {target_subsektor} untuk dibandingkan.\n")
         return [], {}
     
-    return calculate_mahalanobis_distance(filtered_table, target_aset, target_mc, target_ekuitas, target_laba)
+    return calculate_mahalanobis_distance(filtered_table, target_aset, target_mc, target_eku, target_laba)
     
 def compare_without_subsektor():
     """
