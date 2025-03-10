@@ -225,14 +225,43 @@ st.markdown("")
 st.title("Daily Returns Plot")
 st.info("Explore how the proxy returns fluctuate one year after IPO")
 
+subsektor_stock = min_stocks_with_subsektor[0][0]
+target_date_subsektor = final_df[final_df['Kode'] == subsektor_stock]['Date'].iloc[0]
+
+try:
+    st.write(f"Daily Returns Graph; {subsektor_stock}")
+    data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1), interval = '1wk')['Close']
+    daily_returns_1 = data.pct_change().dropna()
+
+    sma, upper_band, lower_band = calculate_bollinger_bands(daily_returns_1)
+
+    data = data.squeeze()
+    sma = sma.squeeze()
+    upper_band = upper_band.squeeze()
+    lower_band = lower_band.squeeze()
+
+    plt.figure(figsize=(12, 5))
+    plt.plot(daily_returns_1.index, daily_returns_1.values, label='Daily Return')
+    plt.plot(sma, label='SMA (10)')
+    plt.plot(upper_band, label='Upper Band', linestyle='dashed', linewidth=1.1)
+    plt.plot(lower_band, label='Lower Band', linestyle='dashed', linewidth=1.1)
+    plt.fill_between(daily_returns_1.index, lower_band, upper_band, color='gray', alpha=0.2)
+    plt.title(f"{subsektor_stock} Daily Returns")
+    plt.xlabel("Date")
+    plt.ylabel("Daily Returns")
+    plt.legend()
+    plt.grid(True)
+    st.pyplot(plt)
+except Exception as e:
+    st.error(f"Error fetching data for {subsektor_stock}: {e}")
+    st.write("Tidak ada hasil")
+
 st.write("Results considering Sub-Sector")
 if min_stocks_with_subsektor:
     df_with_subsektor = create_result_df(min_stocks_with_subsektor, details_with_subsektor)
-    col_df, col_plot = st.columns(2)
 
-    with col_df:
-        st.write('Closest Stock Considering Sub-Sector')
-        st.dataframe(df_with_subsektor, use_container_width=True)  # Perbaikan di sini
+    st.write('Closest Stock Considering Sub-Sector')
+    st.dataframe(df_with_subsektor, use_container_width=True)  # Perbaikan di sini
 
     with col_plot:
         subsektor_stock = min_stocks_with_subsektor[0][0]
