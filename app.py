@@ -181,7 +181,7 @@ st.title("Mahalanobis Risk-Projection Model")
 input_data = {
     "Stock" : [target_stock],
     "Total Assets" : [target_aset],
-    "Market Cap" : [market_cap],
+    "Market Cap" : [target_mc],
     "Total Equities" : [target_eku],
     "Net Income" : [target_laba]
 }
