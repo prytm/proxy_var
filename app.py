@@ -47,6 +47,7 @@ st.markdown("""
 .metric-value {
     font-size: 1.5rem; /* Adjust font size */
     font-weight: bold;
+    text-align: center;
     margin: 0; /* Remove default margins */
 }
 
