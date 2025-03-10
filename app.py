@@ -253,7 +253,7 @@ try:
     plt.ylabel("Daily Returns", color='white')
     plt.tick_params(colors='white')  # Warna sumbu x & y
     plt.legend()
-    plt.grid(True, color='gray')
+    plt.grid(True, color='gray', alpha = 0.25)
     st.pyplot(plt)
 except Exception as e:
     st.error(f"Error fetching data for {subsektor_stock}: {e}")
