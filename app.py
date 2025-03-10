@@ -146,7 +146,11 @@ def compare_without_subsektor():
 
 min_stocks_with_subsektor, details_with_subsektor = compare_with_subsektor()
 min_stocks_without_subsektor, details_without_subsektor = compare_without_subsektor()
-    
+
+subsektor_data = df_var[df_var['Kode'] == subsektor_stock]
+var_1 = subsektor_data['VaR 1%']
+var_99 = subsektor_data['VaR 99%']
+
 # Fungsi untuk membuat DataFrame dari hasil perbandingan
 def create_result_df(sorted_stocks, details):
     """
@@ -186,6 +190,20 @@ input_data = {
 }
 input_df = pd.DataFrame(input_data)
 st.table(input_df)
+
+# Display VaR 1% and aR 99%
+col1, col2 = st.columns([1,1], gap = "small")
+
+with col1:
+    # Using the custom class for CALL value
+    st.markdown(f"""
+        <div class = "metric-container metric-call">
+            <div>
+                <div class = "metric-label">VaR 1%</div>
+                <div class = "metric-value">{var_1:.2f}</div>
+            </div>
+        </div>
+    """, unsafe_allow_html = True)
 
 st.write("Results considering Sub-Sector")
 if min_stocks_with_subsektor:
