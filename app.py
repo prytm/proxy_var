@@ -25,7 +25,7 @@ st.markdown("""
     justify-content: center;
     align-items: center;
     padding: 8px;
-    width: 200px; /* 👉 Ubah ini jadi nilai tetap misalnya 200px */
+    width: auto;
     margin: 0 auto;
 }
 
