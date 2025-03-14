@@ -108,7 +108,7 @@ with st.sidebar:
     target_subsektor = st.selectbox("Sub Sektor Target:", options=subsektor_options, index=subsektor_options.index('Property & Real Estate'))
 
     # Informasi tempat mendapatkan dat
-    st.markdown("Get the latest IPO data from **[e-IPO Indonesia]**(https://e-ipo.co.id/)")
+    st.markdown("Get the financial report IPO data from<br>**[e-IPO Indonesia](https://e-ipo.co.id/)**", unsafe_allow_html=True)
     
 # Konversi ke DataFrame
 comparison_table = pd.DataFrame(final_df)
