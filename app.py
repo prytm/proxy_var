@@ -16,13 +16,16 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded")
 
+hide_github_icon = """
+#GithubIcon {
+  visibility: hidden;
+}
+"""
+st.markdown(hide_github_icon, unsafe_allow_html=True)
+
 # Custom CSS to inject into Streamlit
 st.markdown("""
 <style>
-
-GithubIcon {
-  visibility: hidden;
-}
 
 /* Adjust the size and alignment of the CALL and PUT value containers */
 .metric-container {
