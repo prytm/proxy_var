@@ -87,8 +87,6 @@ with st.sidebar:
     target_mc = st.number_input("Market Cap Target (in IDR):", value=531000000)
     target_laba = st.number_input("net Profit Current Year Period (in IDR):", value=73414622023)
 
-    st.markdown("📊 **Get the latest IPO data from [e-IPO Indonesia](https://e-ipo.co.id/)**")
-    
     # Daftar pilihan subsektor
     subsektor_options = [
         'Oil, Gas, & Coal', 'Basic Materials', 'Banks',
@@ -109,6 +107,9 @@ with st.sidebar:
     # Dropdown untuk memilih subsektor
     target_subsektor = st.selectbox("Sub Sektor Target:", options=subsektor_options, index=subsektor_options.index('Property & Real Estate'))
 
+    # Informasi tempat mendapatkan dat
+    st.markdown("📊 **Get the latest IPO data from [e-IPO Indonesia](https://e-ipo.co.id/)**")
+    
 # Konversi ke DataFrame
 comparison_table = pd.DataFrame(final_df)
     
