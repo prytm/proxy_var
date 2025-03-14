@@ -86,6 +86,8 @@ with st.sidebar:
     target_eku = st.number_input("Total Equities Target (in IDR):", value=59158929209)
     target_mc = st.number_input("Market Cap Target (in IDR):", value=531000000)
     target_laba = st.number_input("net Profit Current Year Period (in IDR):", value=73414622023)
+
+    st.markdown("📊 **Get the latest IPO data from [e-IPO Indonesia](https://e-ipo.co.id/)**")
     
     # Daftar pilihan subsektor
     subsektor_options = [
