@@ -19,6 +19,11 @@ st.set_page_config(
 # Custom CSS to inject into Streamlit
 st.markdown("""
 <style>
+
+GithubIcon {
+  visibility: hidden;
+}
+
 /* Adjust the size and alignment of the CALL and PUT value containers */
 .metric-container {
     display: flex;
