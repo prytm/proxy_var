@@ -231,7 +231,7 @@ subsektor_stock = min_stocks_with_subsektor[0][0]
 target_date_subsektor = final_df[final_df['Kode'] == subsektor_stock]['Date'].iloc[0]
 
 try:
-    data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(years=1), interval = '1wk')['Close']
+    data = yf.download(subsektor_stock, start=target_date_subsektor, end=pd.to_datetime(target_date_subsektor) + pd.DateOffset(months = 3), interval = '1d')['Close']
     daily_returns_1 = data.pct_change().dropna()
 
     sma, upper_band, lower_band = calculate_bollinger_bands(daily_returns_1)
