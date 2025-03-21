@@ -7,8 +7,8 @@ import scipy
 from scipy.spatial.distance import mahalanobis
 
 # Load data
-final_df = pd.read_csv('final_df (5).csv', delimiter=',')
-df_var = pd.read_csv('df_var_99.csv', delimiter = ',')
+final_df = pd.read_csv('final_df.csv', delimiter=',')
+df_var = pd.read_csv('df_var.csv', delimiter = ',')
 
 st.set_page_config(
     page_title="Risk Projection",
@@ -168,8 +168,7 @@ min_stocks_without_subsektor, details_without_subsektor = compare_without_subsek
 
 subsektor_stock = min_stocks_with_subsektor[0][0]
 subsektor_data = df_var[df_var['Kode'] == subsektor_stock]
-var_1 = subsektor_data['Var_1%'].values[0]
-var_99 = subsektor_data['Var_99%'].values[0]
+var = subsektor_data['VaR'].values[0]
 
 # Fungsi untuk membuat DataFrame dari hasil perbandingan
 def create_result_df(sorted_stocks, details):
@@ -211,30 +210,16 @@ input_data = {
 input_df = pd.DataFrame(input_data)
 st.table(input_df)
 
-# Display VaR 1% and VaR 99%
-col1, col2 = st.columns([1,1])
+# VaR Value
 
-with col1:
-    # Using the custom class for CALL value
-    st.markdown(f"""
-        <div class = "metric-container metric-1">
-            <div>
-                <div class = "metric-label">📉 Value at Risk 1%</div>
-                <div class = "metric-value">{var_1:.2f}</div>
-            </div>
+st.markdown(f"""
+    <div class = "metric-container metric-1">
+        <div>
+            <div class = "metric-label">📉 Value at Risk</div>
+            <div class = "metric-value">{var:.2f}</div>
         </div>
-    """, unsafe_allow_html = True)
-
-with col2:
-    # Using the custom class for CALL value
-    st.markdown(f"""
-        <div class = "metric-container metric-99">
-            <div>
-                <div class = "metric-label">📈 Value at Risk 99%</div>
-                <div class = "metric-value">{var_99:.2f}</div>
-            </div>
-        </div>
-    """, unsafe_allow_html = True)
+    </div>
+""", unsafe_allow_html = True)
 
 st.markdown("")
 st.markdown("")
