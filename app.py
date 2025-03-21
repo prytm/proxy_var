@@ -107,7 +107,8 @@ with st.sidebar:
     # Dropdown untuk memilih subsektor
     target_subsektor = st.selectbox("Sub Sektor Target:", options=subsektor_options, index=subsektor_options.index('Property & Real Estate'))
 
-    # Informasi tempat mendapatkan dat
+    # Informasi tempat mendapatkan data
+    st.markdown("---")
     st.markdown("Get the financial report IPO data from<br>**[e-IPO Indonesia](https://e-ipo.co.id/)**", unsafe_allow_html=True)
     
 # Konversi ke DataFrame
