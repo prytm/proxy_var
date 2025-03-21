@@ -225,7 +225,7 @@ st.markdown("")
 st.markdown("")
 
 st.header("Weekly Returns Plot Projection")
-st.info("Explore how the weekly returns projection with 95% confidence interval MA fluctuate one year after IPO")
+st.info("Explore how the daily returns projection with 95% confidence interval Moving Average fluctuate 3 months after IPO")
 
 subsektor_stock = min_stocks_with_subsektor[0][0]
 target_date_subsektor = final_df[final_df['Kode'] == subsektor_stock]['Date'].iloc[0]
