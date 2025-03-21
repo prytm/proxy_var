@@ -187,7 +187,7 @@ def create_result_df(sorted_stocks, details):
     return pd.DataFrame(data)
 
 # Fungsi untuk menghitung Bollinger Bands
-def calculate_bollinger_bands(data, window=15):
+def calculate_bollinger_bands(data, window=10):
     """
     Menghitung Bollinger Bands.
     """
