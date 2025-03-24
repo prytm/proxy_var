@@ -216,7 +216,7 @@ st.table(input_df)
 st.markdown(f"""
     <div class = "metric-container metric-1">
         <div>
-            <div class = "metric-label">📉 Value at Risk</div>
+            <div class = "metric-label">📉 Absolute Value at Risk</div>
             <div class = "metric-value">{var:.2f}</div>
         </div>
     </div>
