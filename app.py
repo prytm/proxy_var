@@ -8,7 +8,7 @@ from scipy.spatial.distance import mahalanobis
 
 # Load data
 final_df = pd.read_csv('final_df.csv', delimiter=',')
-df_var = pd.read_csv('df_var.csv', delimiter = ',')
+df_var = pd.read_csv('df_var (1).csv', delimiter = ',')
 
 st.set_page_config(
     page_title="Risk Projection",
