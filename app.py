@@ -237,6 +237,8 @@ try:
 
     sma, upper_band, lower_band = calculate_bollinger_bands(daily_returns_1)
 
+    st.write(data)
+    
     data = data.squeeze()
     sma = sma.squeeze()
     upper_band = upper_band.squeeze()
