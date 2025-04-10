@@ -236,8 +236,6 @@ try:
     daily_returns_1 = ((data.shift(-4) - data) / data).dropna()
 
     sma, upper_band, lower_band = calculate_bollinger_bands(daily_returns_1)
-
-    st.write(data)
     
     data = data.squeeze()
     sma = sma.squeeze()
